@@ -19,7 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="res\main.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Ship\ship.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Ship\ship.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

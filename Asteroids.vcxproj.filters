@@ -7,8 +7,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="res\main.cpp">
-      <Filter>Archivos de recursos</Filter>
-    </ClCompile>
+    <ClCompile Include="src\Ship\ship.cpp" />
+    <ClCompile Include="src\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Ship\ship.h" />
   </ItemGroup>
 </Project>
