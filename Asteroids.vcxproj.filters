@@ -9,8 +9,10 @@
   <ItemGroup>
     <ClCompile Include="src\Ship\ship.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Asteriods\asteroids.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Ship\ship.h" />
+    <ClInclude Include="src\Asteriods\asteroids.h" />
   </ItemGroup>
 </Project>

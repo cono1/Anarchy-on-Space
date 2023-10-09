@@ -3,6 +3,7 @@
 #include "raylib.h"
 
 #include "Ship/ship.h"
+#include "Asteriods/asteroids.h"
 
 using namespace game;
 
@@ -14,8 +15,11 @@ int main()
     InitWindow(1024, 768, "Asteroids");
 
     Ship ship;
+    Asteroid bigAsteroid;
+
     Screens screen = INGAME;
 
+    initAsteroid(bigAsteroid, BIG);
     initShip(ship);
 
     // Loop
@@ -29,6 +33,7 @@ int main()
             BeginDrawing();
             ClearBackground(WHITE);
 
+            drawAsteroid(bigAsteroid, BIG);
             drawShip(ship);
 
             EndDrawing();
@@ -38,6 +43,8 @@ int main()
         }
 
     }
+
+    deInitAsteroid(bigAsteroid);
     deInitShip(ship);
     CloseWindow();
 }
