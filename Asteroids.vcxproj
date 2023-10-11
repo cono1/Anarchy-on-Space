@@ -20,11 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Asteriods\asteroids.cpp" />
+    <ClCompile Include="src\Bullets\bullets.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Ship\ship.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Asteriods\asteroids.h" />
+    <ClInclude Include="src\Bullets\bullets.h" />
     <ClInclude Include="src\Ship\ship.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
