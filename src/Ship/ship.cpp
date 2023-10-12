@@ -5,8 +5,8 @@
 namespace game
 {
 void rotateShip(Ship& ship);
-//void moveShip(Ship& ship);
-//void checkShipLimits(Ship& ship);
+void moveShip(Ship& ship);
+void checkShipLimits(Ship& ship);
 
 void initShip(Ship& ship)
 {
@@ -24,8 +24,8 @@ void initShip(Ship& ship)
 void updateShip(Ship& ship)
 {
     rotateShip(ship);
-    //moveShip(ship);
-    //checkShipLimits(ship);
+    moveShip(ship);
+    checkShipLimits(ship);
 }
 
 void drawShip(Ship ship)
@@ -56,15 +56,33 @@ void rotateShip(Ship& ship)
     ship.rotation = angle;
 }
 
-//void moveShip(Ship& ship)
-//{
-//
-//}
-//
-//void checkShipLimits(Ship& ship)
-//{
-//
-//}
+void moveShip(Ship& ship)
+{
+    if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
+    {
+        ship.dir = Vector2Normalize(ship.dir);
+        ship.acceleration.x -= ship.dir.x;
+        ship.acceleration.y -= ship.dir.y;
+    }
+
+    ship.pos.x += ship.acceleration.x * GetFrameTime();
+    ship.pos.y += ship.acceleration.y * GetFrameTime();
+}
+
+void checkShipLimits(Ship& ship)
+{
+    if (ship.pos.x > static_cast<float>(GetScreenWidth()))
+        ship.pos.x = 0;
+
+    if (ship.pos.x < 0)
+        ship.pos.x = static_cast<float>(GetScreenWidth());
+
+    if (ship.pos.y > static_cast<float>(GetScreenHeight()))
+        ship.pos.y = 0;
+
+    if (ship.pos.y < 0)
+        ship.pos.y = static_cast<float>(GetScreenHeight());
+}
 
 void deInitShip(Ship& ship)
 {
