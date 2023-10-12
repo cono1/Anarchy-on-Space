@@ -4,7 +4,7 @@
 
 namespace game
 {
-//void rotateShip(Ship& ship);
+void rotateShip(Ship& ship);
 //void moveShip(Ship& ship);
 //void checkShipLimits(Ship& ship);
 
@@ -21,12 +21,12 @@ void initShip(Ship& ship)
     ship.radius = static_cast<float>(ship.texture.width / 2);
 }
 
-//void updateShip(Ship& ship)
-//{
-//    //rotateShip(ship);
-//    //moveShip(ship);
-//    checkShipLimits(ship);
-//}
+void updateShip(Ship& ship)
+{
+    rotateShip(ship);
+    //moveShip(ship);
+    //checkShipLimits(ship);
+}
 
 void drawShip(Ship ship)
 {
@@ -37,11 +37,25 @@ void drawShip(Ship ship)
     DrawCircleLines(static_cast<int>(ship.pos.x), static_cast<int>(ship.pos.y), ship.radius, RED);
 }
 
-//void rotateShip(Ship& ship)
-//{
-//  
-//}
-//
+void rotateShip(Ship& ship)
+{
+    ship.dir.x = ship.pos.x - GetMouseX();
+    ship.dir.y = ship.pos.y - GetMouseY();
+    float angle = (atan2f(static_cast<float>(ship.dir.y), static_cast<float>(ship.dir.x))) * 180 / PI;
+
+    if (ship.dir.x < GetScreenWidth() / 2 && ship.dir.y < GetScreenHeight() / 2 ||
+        GetMouseX() < GetScreenWidth() / 2 && GetMouseY() > GetScreenHeight() / 2) //cuadrante dos y tres
+    {
+        angle += 180;
+    }
+    else if (ship.dir.x > GetScreenWidth() / 2 && ship.dir.y < GetScreenHeight() / 2)
+    {
+        angle += 360;
+    }
+
+    ship.rotation = angle;
+}
+
 //void moveShip(Ship& ship)
 //{
 //

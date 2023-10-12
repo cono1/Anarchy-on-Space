@@ -39,6 +39,7 @@ int main()
             break;
         case INGAME:
             //Update----
+            updateShip(ship);
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 for (int i = 0; i < maxBullets; i++)

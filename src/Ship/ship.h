@@ -15,7 +15,7 @@ struct Ship
 };
 
 void initShip(Ship& ship);
-//void updateShip(Ship& ship);
+void updateShip(Ship& ship);
 void drawShip(Ship ship);
 void deInitShip(Ship& ship);
 }
