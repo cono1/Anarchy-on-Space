@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "Utilities/utilities.h"
+
 namespace game
 {
 void initBigAsteroid(Asteroid& asteroid);
@@ -69,8 +71,7 @@ void deInitAsteroid(Asteroid& asteroid)
 void initBigAsteroid(Asteroid& asteroid)
 {
 	asteroid.texture = LoadTexture("res/TempAsteroid.png");
-	asteroid.pos.x = 250;
-	asteroid.pos.y = 250;
+	asteroid.pos = GetRandomPositionNearEdges(200);
 	asteroid.dir.x = 0;
 	asteroid.dir.y = 0;
 	asteroid.radius = static_cast<float>(asteroid.texture.width / 2);
