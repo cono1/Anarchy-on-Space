@@ -17,7 +17,7 @@ struct Asteroid
 };
 
 void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType);
-//void updateAsteroid(Asteroid& asteroid, AsteroidType asteroidType);
-void drawAsteroid(Asteroid asteroid, AsteroidType asteroidType);
+void updateAsteroid(Asteroid& asteroid);
+void drawAsteroid(Asteroid asteroid);
 void deInitAsteroid(Asteroid& asteroid);
 }
