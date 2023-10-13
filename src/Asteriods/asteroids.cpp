@@ -28,19 +28,25 @@ void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType)
 
 void updateAsteroid(Asteroid& asteroid)
 {
-	checkAsteroidLimits(asteroid);
-	asteroid.pos.x += asteroid.dir.x * GetFrameTime();
-	asteroid.pos.y += asteroid.dir.y * GetFrameTime();
-	asteroid.rotation += 10 * GetFrameTime();
+	if (asteroid.active)
+	{
+		checkAsteroidLimits(asteroid);
+		asteroid.pos.x += asteroid.dir.x * GetFrameTime();
+		asteroid.pos.y += asteroid.dir.y * GetFrameTime();
+		asteroid.rotation += 10 * GetFrameTime();
+	}
 }
 
 void drawAsteroid(Asteroid asteroid)
 {
-	DrawTexturePro(asteroid.texture,
-		{ 0.0f, 0.0f, static_cast<float>(asteroid.texture.width), static_cast<float>(asteroid.texture.height) },
-		{ asteroid.pos.x, asteroid.pos.y, static_cast<float>(asteroid.texture.width), static_cast<float>(asteroid.texture.height) },
-		{ static_cast<float>(asteroid.texture.width / 2), static_cast<float>(asteroid.texture.height / 2) }, asteroid.rotation, WHITE);
-	DrawCircleLines(static_cast<int>(asteroid.pos.x), static_cast<int>(asteroid.pos.y), asteroid.radius, RED);
+	if (asteroid.active)
+	{
+		DrawTexturePro(asteroid.texture,
+			{ 0.0f, 0.0f, static_cast<float>(asteroid.texture.width), static_cast<float>(asteroid.texture.height) },
+			{ asteroid.pos.x, asteroid.pos.y, static_cast<float>(asteroid.texture.width), static_cast<float>(asteroid.texture.height) },
+			{ static_cast<float>(asteroid.texture.width / 2), static_cast<float>(asteroid.texture.height / 2) }, asteroid.rotation, WHITE);
+		DrawCircleLines(static_cast<int>(asteroid.pos.x), static_cast<int>(asteroid.pos.y), asteroid.radius, RED);
+	}
 }
 
 void deInitAsteroid(Asteroid& asteroid)

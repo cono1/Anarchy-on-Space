@@ -5,6 +5,7 @@
 #include "Ship/ship.h"
 #include "Asteriods/asteroids.h"
 #include "Bullets/bullets.h"
+#include "GameLogic/collisionManager.h"
 
 using namespace game;
 
@@ -58,14 +59,24 @@ int main()
                     }
                 }
             }
+
             for (int i = 0; i < maxBullets; i++)
                 updateBullet(bullet[i]);
 
             for (int i = 0; i < bigAsteroidsMax; i++)
             {
                 updateAsteroid(bigAsteroids[i]);
+
+                for (int j = 0; j < maxBullets; j++)
+                {
+                    if (checkBulletToAsteroidCollision(bullet[j], bigAsteroids[i]))
+                    {
+                        bigAsteroids[i].active = false;
+                        deActivateBullet(bullet[j]);
+                        //break;
+                    }
+                }
             }
-            
             //------
 
             //Drawing----
