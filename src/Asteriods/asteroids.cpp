@@ -26,6 +26,16 @@ void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType)
 	}
 }
 
+void restartAsteroids(Asteroid& asteroid)
+{
+	asteroid.pos.x = 0;
+	asteroid.pos.y = 0;
+	asteroid.dir.x = static_cast<float>(GetRandomValue(-100, 100));
+	asteroid.dir.y = static_cast<float>(GetRandomValue(-100, 100));
+	//asteroid.radius = 0;
+	//asteroid.rotation = 0;
+}
+
 void updateAsteroid(Asteroid& asteroid)
 {
 	if (asteroid.active)

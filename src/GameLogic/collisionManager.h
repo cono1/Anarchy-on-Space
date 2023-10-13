@@ -7,4 +7,5 @@
 namespace game
 {
 bool checkBulletToAsteroidCollision(Bullet bullet, Asteroid asteroid);
+bool checkShipToAsteroidCollision(Ship ship, Asteroid asteroid);
 }

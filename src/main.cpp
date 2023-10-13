@@ -67,15 +67,26 @@ int main()
             {
                 updateAsteroid(bigAsteroids[i]);
 
+                if (checkShipToAsteroidCollision(ship, bigAsteroids[i]))
+                {
+
+                    
+                    restartShip(ship);
+
+                    for (int j = 0; j < bigAsteroidsMax; j++)
+                        restartAsteroids(bigAsteroids[j]);
+                }
+
                 for (int j = 0; j < maxBullets; j++)
                 {
                     if (checkBulletToAsteroidCollision(bullet[j], bigAsteroids[i]))
                     {
                         bigAsteroids[i].active = false;
                         deActivateBullet(bullet[j]);
-                        //break;
+                        break;
                     }
                 }
+
             }
             //------
 
