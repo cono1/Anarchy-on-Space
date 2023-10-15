@@ -12,10 +12,17 @@ struct Ship
 	Vector2 acceleration;
 	float rotation;
 	float radius;
+	int lives;
+	int maxLives;
+	bool isAlive;
 };
 
 void initShip(Ship& ship);
+void restartShip(Ship& ship);
 void updateShip(Ship& ship);
 void drawShip(Ship ship);
 void deInitShip(Ship& ship);
+
+void addShipLives(Ship& ship, int lives);
+void removeShipLives(Ship& ship, int lives);
 }

@@ -5,15 +5,18 @@
 #include "Ship/ship.h"
 #include "Asteriods/asteroids.h"
 #include "Bullets/bullets.h"
-#include "GameLogic/collisionManager.h"
+#include "Game/collisionManager.h"
+#include "Game/menu.h"
 
 using namespace game;
-
-enum Screens{MENU, INGAME};
 
 int main()
 {
     InitWindow(1024, 768, "Asteroids");
+
+    int titleSize = 90;
+    int optionsSize = 50;
+    int pauseSize = 25;
 
     const int maxBullets = 5;
     const int bigAsteroidsMax = 5;
@@ -21,8 +24,6 @@ int main()
     Bullet bullet[maxBullets];
     Ship ship;
     Asteroid bigAsteroids[bigAsteroidsMax];
-
-    Screens screen = INGAME;
 
     SetRandomSeed(static_cast<unsigned int>(time(NULL)));
 
@@ -34,21 +35,32 @@ int main()
 
     for (int i = 0; i < bigAsteroidsMax; i++)
         initAsteroid(bigAsteroids[i], BIG);
-    //-----------
    
+    initMenu(GetScreenWidth());
+    CurrentScreen currentScreen = MENU;
+    //-----------
 
     // Loop
     while (!WindowShouldClose())
     {
-        switch (screen)
+        switch (currentScreen)
         {
-        case MENU:
+        case EXIT:
+            return 0;
             break;
-        case INGAME:
+        case CREDITS:
+            break;
+        case RULES:
+            break;
+        case PLAY:
             //Update----
+            if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            {
+                currentScreen = PAUSE;
+            }
             updateShip(ship);
 
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !isPausePressed())
             {
                 for (int i = 0; i < maxBullets; i++)
                 {
@@ -69,8 +81,7 @@ int main()
 
                 if (checkShipToAsteroidCollision(ship, bigAsteroids[i]))
                 {
-
-                    
+                    removeShipLives(ship, 1);
                     restartShip(ship);
 
                     for (int j = 0; j < bigAsteroidsMax; j++)
@@ -92,24 +103,42 @@ int main()
 
             //Drawing----
             BeginDrawing();
-            ClearBackground(WHITE);
+            ClearBackground(BLACK);
 
             for (int i = 0; i < bigAsteroidsMax; i++)
                 drawAsteroid(bigAsteroids[i]);
 
             for (int i = 0; i < maxBullets; i++)
                 drawBullet(bullet[i]);
-            
+
             drawShip(ship);
-            
+
+            printBackButton(true, pauseSize);
+
             EndDrawing();
             //-----
+            break;
+        case MENU:
+            updateMenu(currentScreen);
+
+            BeginDrawing();
+            ClearBackground(BLACK);
+            printMenu("ANARCHY ON SPACE", titleSize, optionsSize);
+            EndDrawing();
+            break;
+        case PAUSE:
+            updateMenu(currentScreen);
+
+            BeginDrawing();
+            ClearBackground(BLACK);
+            printMenu("PAUSED", titleSize, optionsSize);
+            EndDrawing();
             break;
         default:
             break;
         }
-
     }
+
     for (int i = 0; i < bigAsteroidsMax; i++)
         deInitAsteroid(bigAsteroids[i]);
 

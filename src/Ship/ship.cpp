@@ -7,6 +7,7 @@ namespace game
 void rotateShip(Ship& ship);
 void moveShip(Ship& ship);
 void checkShipLimits(Ship& ship);
+void checkShipIsAlive(Ship& ship);
 
 void initShip(Ship& ship)
 {
@@ -19,6 +20,17 @@ void initShip(Ship& ship)
     ship.acceleration.x = 0;
     ship.acceleration.y = 0;
     ship.radius = static_cast<float>(ship.texture.width / 2);
+}
+
+void restartShip(Ship& ship)
+{
+    ship.pos.x = static_cast<float>(GetScreenWidth()) / 2;
+    ship.pos.y = static_cast<float>(GetScreenHeight()) / 2;
+    ship.dir.x = 15;
+    ship.dir.y = 15;
+    ship.rotation = 0;
+    ship.acceleration.x = 0;
+    ship.acceleration.y = 0;
 }
 
 void updateShip(Ship& ship)
@@ -35,6 +47,23 @@ void drawShip(Ship ship)
         { ship.pos.x, ship.pos.y, static_cast<float>(ship.texture.width), static_cast<float>(ship.texture.height) },
         { static_cast<float>(ship.texture.width / 2), static_cast<float>(ship.texture.height / 2) }, ship.rotation, WHITE);
     DrawCircleLines(static_cast<int>(ship.pos.x), static_cast<int>(ship.pos.y), ship.radius, RED);
+}
+
+void deInitShip(Ship& ship)
+{
+    UnloadTexture(ship.texture);
+}
+
+void addShipLives(Ship& ship, int lives)
+{
+    if (ship.lives - lives <= ship.maxLives)
+        ship.lives += lives;
+}
+
+void removeShipLives(Ship& ship, int lives)
+{
+    if (ship.lives - lives >= 0)
+        ship.lives -= lives;
 }
 
 void rotateShip(Ship& ship)
@@ -84,8 +113,11 @@ void checkShipLimits(Ship& ship)
         ship.pos.y = static_cast<float>(GetScreenHeight());
 }
 
-void deInitShip(Ship& ship)
+void checkShipIsAlive(Ship& ship)
 {
-    UnloadTexture(ship.texture);
+    if (ship.lives <= 0)
+    {
+        ship.isAlive = false;
+    }
 }
 }
