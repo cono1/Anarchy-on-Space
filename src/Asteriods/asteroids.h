@@ -19,6 +19,7 @@ struct Asteroid
 void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType);
 void restartAsteroids(Asteroid& asteroid);
 void updateAsteroid(Asteroid& asteroid);
+void activateAsteroid(Asteroid& asteroid, Asteroid baseAsteroid, float offset);
 void drawAsteroid(Asteroid asteroid);
 void deInitAsteroid(Asteroid& asteroid);
 }

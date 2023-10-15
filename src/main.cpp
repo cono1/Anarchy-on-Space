@@ -20,21 +20,32 @@ int main()
 
     const int maxBullets = 5;
     const int bigAsteroidsMax = 5;
+    const int medAsteroidsMax = bigAsteroidsMax * 2;
+
+    int bigAsteroidsActive = 0;
+    int medAsteroidsActive = 0;
 
     Bullet bullet[maxBullets];
     Ship ship;
     Asteroid bigAsteroids[bigAsteroidsMax];
+    Asteroid medAsteroids[medAsteroidsMax];
 
     SetRandomSeed(static_cast<unsigned int>(time(NULL)));
 
-    //Init-------
+    //Init-------------------------------------------------------------------------------------------------
     initShip(ship);
 
     for (int i = 0; i < maxBullets; i++)
         initBullet(bullet[i], ship.pos, ship.texture.width, ship.texture.height);   
 
     for (int i = 0; i < bigAsteroidsMax; i++)
+    {
         initAsteroid(bigAsteroids[i], BIG);
+        bigAsteroidsActive++;
+    }
+
+    for (int i = 0; i < medAsteroidsMax; i++)
+        initAsteroid(medAsteroids[i], MEDIUM);
    
     initMenu(GetScreenWidth());
     CurrentScreen currentScreen = MENU;
@@ -53,11 +64,12 @@ int main()
         case RULES:
             break;
         case PLAY:
-            //Update----
+            //Update---------------------------------------------------------------------------------------
             if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
             {
                 currentScreen = PAUSE;
             }
+
             updateShip(ship);
 
             if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !isPausePressed())
@@ -92,21 +104,42 @@ int main()
                 {
                     if (checkBulletToAsteroidCollision(bullet[j], bigAsteroids[i]))
                     {
-                        bigAsteroids[i].active = false;
                         deActivateBullet(bullet[j]);
+                        bigAsteroidsActive--;
+
+                        if (medAsteroidsActive > medAsteroidsMax)
+                        {
+                            medAsteroidsActive = 0;
+                        }
+
+                        activateAsteroid(medAsteroids[medAsteroidsActive], bigAsteroids[i], 1);
+                        medAsteroidsActive++;
+                        activateAsteroid(medAsteroids[medAsteroidsActive], bigAsteroids[i], -1);
+                        medAsteroidsActive++;
+
+                        bigAsteroids[i].active = false;
+
                         break;
                     }
                 }
 
             }
+
+            for (int i = 0; i < medAsteroidsMax; i++)
+            {
+                updateAsteroid(medAsteroids[i]);
+            }
             //------
 
-            //Drawing----
+            //Drawing--------------------------------------------------------------------------------------
             BeginDrawing();
             ClearBackground(BLACK);
 
             for (int i = 0; i < bigAsteroidsMax; i++)
                 drawAsteroid(bigAsteroids[i]);
+
+            for (int i = 0; i < medAsteroidsMax; i++)
+                drawAsteroid(medAsteroids[i]);
 
             for (int i = 0; i < maxBullets; i++)
                 drawBullet(bullet[i]);
