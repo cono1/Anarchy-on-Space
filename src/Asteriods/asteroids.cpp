@@ -10,6 +10,7 @@ void checkAsteroidLimits(Asteroid& asteroid);
 
 void initBigAsteroid(Asteroid& asteroid);
 void initMedAsteroid(Asteroid& asteroid);
+void initSmallAsteroid(Asteroid& asteroid);
 
 void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType)
 {
@@ -22,6 +23,7 @@ void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType)
 		initMedAsteroid(asteroid);
 		break;
 	case SMALL:
+		initSmallAsteroid(asteroid);
 		break;
 	default:
 		break;
@@ -93,8 +95,8 @@ void initBigAsteroid(Asteroid& asteroid)
 {
 	asteroid.texture = LoadTexture("res/TempAsteroid.png");
 	asteroid.pos = GetRandomPositionNearEdges(200);
-	asteroid.dir.x = static_cast<float>(GetRandomValue(-120, 120));
-	asteroid.dir.y = static_cast<float>(GetRandomValue(-120, 120));
+	asteroid.dir.x = static_cast<float>(GetRandomValue(-70, 70));
+	asteroid.dir.y = static_cast<float>(GetRandomValue(-70, 70));
 	asteroid.radius = static_cast<float>(asteroid.texture.width / 2);
 	asteroid.rotation = 0;
 	asteroid.active = true;
@@ -106,6 +108,18 @@ void initMedAsteroid(Asteroid& asteroid)
 	asteroid.pos.y = 0;
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-100, 100));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-100, 100));
+	asteroid.radius = 0;
+	asteroid.rotation = 0;
+	asteroid.active = false;
+}
+
+void initSmallAsteroid(Asteroid& asteroid)
+{
+	asteroid.texture = LoadTexture("res/TempSmallAsteroid.png");
+	asteroid.pos.x = 0;
+	asteroid.pos.y = 0;
+	asteroid.dir.x = static_cast<float>(GetRandomValue(-120, 120));
+	asteroid.dir.y = static_cast<float>(GetRandomValue(-120, 120));
 	asteroid.radius = 0;
 	asteroid.rotation = 0;
 	asteroid.active = false;
