@@ -25,6 +25,7 @@
     <ClCompile Include="src\Game\game.cpp" />
     <ClCompile Include="src\Game\menu.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Player\player.cpp" />
     <ClCompile Include="src\Ship\ship.cpp" />
     <ClCompile Include="src\Utilities\utilities.cpp" />
   </ItemGroup>
@@ -34,6 +35,7 @@
     <ClInclude Include="src\Game\collisionManager.h" />
     <ClInclude Include="src\Game\game.h" />
     <ClInclude Include="src\Game\menu.h" />
+    <ClInclude Include="src\Player\player.h" />
     <ClInclude Include="src\Ship\ship.h" />
     <ClInclude Include="src\Utilities\utilities.h" />
   </ItemGroup>

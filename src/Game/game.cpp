@@ -9,6 +9,7 @@
 #include "Bullets/bullets.h"
 #include "Game/collisionManager.h"
 #include "Game/menu.h"
+#include "Player/player.h"
 
 namespace game
 {
@@ -133,83 +134,6 @@ void updateGame()
     updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive, medAsteroids, medAsteroidsMax, medAsteroidsActive);
     updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive, smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
     updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
-
-    /*for (int i = 0; i < bigAsteroidsMax; i++)
-    {
-        updateAsteroid(bigAsteroids[i]);
-
-        if (checkShipToAsteroidCollision(ship, bigAsteroids[i]))
-        {
-            removeShipLives(ship, 1);
-            restartShip(ship);
-
-            for (int j = 0; j < bigAsteroidsMax; j++)
-                restartAsteroids(bigAsteroids[j]);
-        }
-
-        for (int j = 0; j < maxBullets; j++)
-        {
-            if (checkBulletToAsteroidCollision(bullet[j], bigAsteroids[i]))
-            {
-                deActivateBullet(bullet[j]);
-                bigAsteroidsActive--;
-
-                if (medAsteroidsActive > medAsteroidsMax)
-                {
-                    medAsteroidsActive = 0;
-                }
-
-                activateAsteroid(medAsteroids[medAsteroidsActive], bigAsteroids[i], 1);
-                medAsteroidsActive++;
-                activateAsteroid(medAsteroids[medAsteroidsActive], bigAsteroids[i], -1);
-                medAsteroidsActive++;
-
-                bigAsteroids[i].active = false;
-
-                break;
-            }
-        }
-
-    }
-
-    for (int i = 0; i < medAsteroidsMax; i++)
-    {
-        updateAsteroid(medAsteroids[i]);
-
-        for (int j = 0; j < maxBullets; j++)
-        {
-            if (checkBulletToAsteroidCollision(bullet[j], medAsteroids[i]))
-            {
-                deActivateBullet(bullet[j]);
-
-                if (smallAsteroidsActive > smallAsteroidsMax)
-                {
-                    smallAsteroidsActive = 0;
-                }
-
-                activateAsteroid(smallAsteroids[smallAsteroidsActive], medAsteroids[i], 1);
-                smallAsteroidsActive++;
-                activateAsteroid(smallAsteroids[smallAsteroidsActive], medAsteroids[i], -1);
-                smallAsteroidsActive++;
-
-                medAsteroids[i].active = false;
-            }
-        }
-    }
-
-    for (int i = 0; i < smallAsteroidsMax; i++)
-    {
-        updateAsteroid(smallAsteroids[i]);
-
-        for (int j = 0; j < maxBullets; j++)
-        {
-            if (checkBulletToAsteroidCollision(bullet[j], smallAsteroids[i]))
-            {
-                deActivateBullet(bullet[j]);
-                smallAsteroids[i].active = false;
-            }
-        }
-    }*/
 }
 
 void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive)
