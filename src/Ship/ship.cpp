@@ -46,7 +46,9 @@ void drawShip(Ship ship)
         { 0.0f, 0.0f, static_cast<float>(ship.texture.width), static_cast<float>(ship.texture.height) },
         { ship.pos.x, ship.pos.y, static_cast<float>(ship.texture.width), static_cast<float>(ship.texture.height) },
         { static_cast<float>(ship.texture.width / 2), static_cast<float>(ship.texture.height / 2) }, ship.rotation, WHITE);
+#ifdef _DEBUG
     DrawCircleLines(static_cast<int>(ship.pos.x), static_cast<int>(ship.pos.y), ship.radius, RED);
+#endif
 }
 
 void deInitShip(Ship& ship)
