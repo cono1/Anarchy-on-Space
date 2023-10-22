@@ -11,13 +11,16 @@
 #include "Game/menu.h"
 #include "Player/player.h"
 
+
 namespace game
 {
+enum class Points{SMALL = 100, MEDIUM = 50, BIG = 20};
+
 void init();
 void loopScreens();
 void updateGame();
-void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive);
-void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
+void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive, int pointToAdd);
+void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive, int pointToAdd);
 void drawGame();
 void drawMenu(std::string title);
 void deinit();
@@ -25,6 +28,10 @@ void deinit();
 static int titleSize = 90;
 static int optionsSize = 50;
 static int pauseSize = 25;
+static float textSize = 50;
+static Color textColor = MAGENTA;
+Vector2 scoreTextPos;
+Vector2 hpTextPos;
 
 static const int maxBullets = 5;
 static const int bigAsteroidsMax = 5;
@@ -40,8 +47,10 @@ static Ship ship;
 static Asteroid bigAsteroids[bigAsteroidsMax];
 static Asteroid medAsteroids[medAsteroidsMax];
 static Asteroid smallAsteroids[smallAsteroidsMax];
-
+static Player player;
 static CurrentScreen currentScreen = MENU;
+static Points points;
+Font font;
         
 void loop()
 {
@@ -53,6 +62,12 @@ void loop()
 void init()
 {
     InitWindow(1024, 768, "Asteroids");
+
+    font = LoadFontEx("res/BebasNeue-Regular.ttf", 150, 0, 550);
+    scoreTextPos.x = static_cast<float>(GetScreenWidth()) - (MeasureTextEx(font, "SCORE: 00000", textSize, 0).x);
+    scoreTextPos.y = 10;
+    hpTextPos.x = static_cast<float>(GetScreenWidth()) - (MeasureTextEx(font, "LIVES: 00", textSize, 0).x);
+    hpTextPos.y = scoreTextPos.y + MeasureTextEx(font, "LIVES: 00", textSize, 0).y;
 
     initShip(ship);
 
@@ -131,12 +146,12 @@ void updateGame()
     for (int i = 0; i < maxBullets; i++)
         updateBullet(bullet[i]);
 
-    updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive, medAsteroids, medAsteroidsMax, medAsteroidsActive);
-    updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive, smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
-    updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+    updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive, medAsteroids, medAsteroidsMax, medAsteroidsActive, static_cast<int>(Points::BIG));
+    updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive, smallAsteroids, smallAsteroidsMax, smallAsteroidsActive, static_cast<int>(Points::MEDIUM));
+    updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive, static_cast<int>(Points::SMALL));
 }
 
-void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive)
+void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive, int pointToAdd)
 {
     for (int i = 0; i < maxAsteroids; i++)
     {
@@ -169,12 +184,14 @@ void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& bas
                 nextAsteroidsActive++;
 
                 asteroid[i].active = false;
+
+                addScore(player, pointToAdd);
             }
         }
     }
 }
 
-void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive)
+void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive, int pointToAdd)
 {
     for (int i = 0; i < maxAsteroids; i++)
     {
@@ -196,6 +213,8 @@ void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& as
                 deActivateBullet(bullet[j]);
                 asteroidsActive--;
                 asteroids[i].active = false;
+
+                addScore(player, pointToAdd);
             }
         }
     }
@@ -222,6 +241,9 @@ void drawGame()
 
     printBackButton(true, pauseSize);
 
+    DrawTextEx(font, TextFormat("SCORE: %i", player.score), scoreTextPos, textSize, 0, textColor);
+    DrawTextEx(font, TextFormat("LIVES: %i", ship.lives), hpTextPos, textSize, 0, textColor);
+
     EndDrawing();
 }
 
@@ -235,6 +257,7 @@ void drawMenu(std::string title)
 
 void deinit()
 {
+    UnloadFont(font);
     for (int i = 0; i < bigAsteroidsMax; i++)
         deInitAsteroid(bigAsteroids[i]);
 

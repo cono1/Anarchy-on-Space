@@ -20,6 +20,9 @@ void initShip(Ship& ship)
     ship.acceleration.x = 0;
     ship.acceleration.y = 0;
     ship.radius = static_cast<float>(ship.texture.width / 2);
+    ship.lives = 5;
+    ship.maxLives = 7;
+    ship.isAlive = true;
 }
 
 void restartShip(Ship& ship)
