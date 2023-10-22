@@ -11,16 +11,13 @@
 #include "Game/menu.h"
 #include "Player/player.h"
 
-
 namespace game
 {
-enum class Points{SMALL = 100, MEDIUM = 50, BIG = 20};
-
 void init();
 void loopScreens();
 void updateGame();
-void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive, int pointToAdd);
-void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive, int pointToAdd);
+void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,                                                   Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive);
+void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
 void drawGame();
 void drawMenu(std::string title);
 void deinit();
@@ -49,7 +46,7 @@ static Asteroid medAsteroids[medAsteroidsMax];
 static Asteroid smallAsteroids[smallAsteroidsMax];
 static Player player;
 static CurrentScreen currentScreen = MENU;
-static Points points;
+
 Font font;
         
 void loop()
@@ -146,29 +143,32 @@ void updateGame()
     for (int i = 0; i < maxBullets; i++)
         updateBullet(bullet[i]);
 
-    updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive, medAsteroids, medAsteroidsMax, medAsteroidsActive, static_cast<int>(Points::BIG));
-    updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive, smallAsteroids, smallAsteroidsMax, smallAsteroidsActive, static_cast<int>(Points::MEDIUM));
-    updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive, static_cast<int>(Points::SMALL));
+    updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive, 
+                          medAsteroids, medAsteroidsMax, medAsteroidsActive);
+    updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive, 
+                          smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+    updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
 }
 
-void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& baseAsteroidsActive, Asteroid nextAsteroid[], int nextAsteroidsMax, int& nextAsteroidsActive, int pointToAdd)
+void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,
+                           Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive)
 {
-    for (int i = 0; i < maxAsteroids; i++)
+    for (int i = 0; i < baseAsteroidsMax; i++)
     {
-        updateAsteroid(asteroid[i]);
+        updateAsteroid(baseAsteroids[i]);
 
-        if (checkShipToAsteroidCollision(ship, asteroid[i]))
+        if (checkShipToAsteroidCollision(ship, baseAsteroids[i]))
         {
             removeShipLives(ship, 1);
             restartShip(ship);
 
-            for (int j = 0; j < maxAsteroids; j++)
-                restartAsteroids(asteroid[j]);
+            for (int j = 0; j < baseAsteroidsMax; j++)
+                restartAsteroids(baseAsteroids[j]);
         }
 
         for (int j = 0; j < maxBullets; j++)
         {
-            if (checkBulletToAsteroidCollision(bullet[j], asteroid[i]))
+            if (checkBulletToAsteroidCollision(bullet[j], baseAsteroids[i]))
             {
                 deActivateBullet(bullet[j]);
                 baseAsteroidsActive--;
@@ -178,20 +178,19 @@ void updateAsteroidsStatus(Asteroid asteroid[], const int maxAsteroids, int& bas
                     nextAsteroidsActive = 0;
                 }
 
-                activateAsteroid(nextAsteroid[nextAsteroidsActive], asteroid[i], 1);
+                activateAsteroid(nextAsteroids[nextAsteroidsActive], baseAsteroids[i], 1);
                 nextAsteroidsActive++;
-                activateAsteroid(nextAsteroid[nextAsteroidsActive], asteroid[i], -1);
+                activateAsteroid(nextAsteroids[nextAsteroidsActive], baseAsteroids[i], -1);
                 nextAsteroidsActive++;
 
-                asteroid[i].active = false;
-
-                addScore(player, pointToAdd);
+                addScore(player, baseAsteroids[i].points);
+                baseAsteroids[i].active = false;
             }
         }
     }
 }
 
-void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive, int pointToAdd)
+void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive)
 {
     for (int i = 0; i < maxAsteroids; i++)
     {
@@ -212,9 +211,8 @@ void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& as
             {
                 deActivateBullet(bullet[j]);
                 asteroidsActive--;
+                addScore(player, asteroids[i].points);
                 asteroids[i].active = false;
-
-                addScore(player, pointToAdd);
             }
         }
     }

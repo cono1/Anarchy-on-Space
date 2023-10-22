@@ -14,6 +14,7 @@ struct Asteroid
 	float radius;
 	float rotation;
 	bool active;
+	int points;
 };
 
 void initAsteroid(Asteroid& asteroid, AsteroidType asteroidType);

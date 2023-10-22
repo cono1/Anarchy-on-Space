@@ -102,6 +102,7 @@ void initBigAsteroid(Asteroid& asteroid)
 	asteroid.radius = static_cast<float>(asteroid.texture.width / 2);
 	asteroid.rotation = 0;
 	asteroid.active = true;
+	asteroid.points = 20;
 }
 void initMedAsteroid(Asteroid& asteroid)
 {
@@ -113,6 +114,7 @@ void initMedAsteroid(Asteroid& asteroid)
 	asteroid.radius = 0;
 	asteroid.rotation = 0;
 	asteroid.active = false;
+	asteroid.points = 50;
 }
 
 void initSmallAsteroid(Asteroid& asteroid)
@@ -125,5 +127,6 @@ void initSmallAsteroid(Asteroid& asteroid)
 	asteroid.radius = 0;
 	asteroid.rotation = 0;
 	asteroid.active = false;
+	asteroid.points = 100;
 }
 }
