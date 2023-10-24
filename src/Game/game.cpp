@@ -18,9 +18,12 @@ void loopScreens();
 void updateGame();
 void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,                                                   Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive);
 void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
+void updatePlayerStatus();
 void drawGame();
 void drawMenu(std::string title);
 void deinit();
+
+bool runGame = true;
 
 static int titleSize = 90;
 static int optionsSize = 50;
@@ -31,7 +34,7 @@ Vector2 scoreTextPos;
 Vector2 hpTextPos;
 
 static const int maxBullets = 5;
-static const int bigAsteroidsMax = 5;
+static const int bigAsteroidsMax = 4;
 static const int medAsteroidsMax = bigAsteroidsMax * 2;
 static const int smallAsteroidsMax = medAsteroidsMax * 2;
 
@@ -66,6 +69,7 @@ void init()
     hpTextPos.x = static_cast<float>(GetScreenWidth()) - (MeasureTextEx(font, "LIVES: 00", textSize, 0).x);
     hpTextPos.y = scoreTextPos.y + MeasureTextEx(font, "LIVES: 00", textSize, 0).y;
 
+    initPlayer(player);
     initShip(ship);
 
     for (int i = 0; i < maxBullets; i++)
@@ -90,12 +94,12 @@ void init()
 
 void loopScreens()
 {
-    while (!WindowShouldClose())
+    while (!WindowShouldClose() && runGame)
     {
         switch (currentScreen)
         {
         case EXIT:
-            return;
+            runGame = false;
             break;
         case CREDITS:
             break;
@@ -121,33 +125,75 @@ void loopScreens()
 
 void updateGame()
 {
-    if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    if (ship.isAlive && !player.won)
     {
-        currentScreen = PAUSE;
-    }
-
-    updateShip(ship);
-
-    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !isPausePressed())
-    {
-        for (int i = 0; i < maxBullets; i++)
+        if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
-            if (!bullet[i].active)
+            currentScreen = PAUSE;
+        }
+
+        updatePlayerStatus();
+
+        updateShip(ship);
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !isPausePressed())
+        {
+            for (int i = 0; i < maxBullets; i++)
             {
-                activateBullet(bullet[i], ship.pos, ship.texture.width, ship.texture.height);
-                break;
+                if (!bullet[i].active)
+                {
+                    activateBullet(bullet[i], ship.pos, ship.texture.width, ship.texture.height);
+                    break;
+                }
             }
         }
+
+        for (int i = 0; i < maxBullets; i++)
+            updateBullet(bullet[i]);
+
+        updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive,
+            medAsteroids, medAsteroidsMax, medAsteroidsActive);
+        updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive,
+            smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+        updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+
     }
+    
+    if (!ship.isAlive || player.won)
+    {
+        //runGame = true;
+        if (IsKeyPressed(KEY_A))
+        {
+            runGame = true;
+            for (int i = 0; i < bigAsteroidsMax; i++)
+            {
+                bigAsteroids[i].active = true;
+                restartAsteroids(bigAsteroids[i]);
+            }
+            for (int i = 0; i < medAsteroidsMax; i++)
+            {
+                medAsteroids[i].active = false;
 
-    for (int i = 0; i < maxBullets; i++)
-        updateBullet(bullet[i]);
+            }
+            for (int i = 0; i < smallAsteroidsMax; i++)
+            {
+                smallAsteroids[i].active = false;
 
-    updateAsteroidsStatus(bigAsteroids, bigAsteroidsMax, bigAsteroidsActive, 
-                          medAsteroids, medAsteroidsMax, medAsteroidsActive);
-    updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive, 
-                          smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
-    updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+            }
+            for (int j = 0; j < maxBullets; j++)
+            {
+                deActivateBullet(bullet[j]);
+            }
+            restartShip(ship);
+            ship.lives = ship.maxLives;
+            resetPlayer(player);
+        }
+        else if (IsKeyPressed(KEY_B))
+        {
+            runGame = false;
+            currentScreen = EXIT;
+        }
+    }  
 }
 
 void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,
@@ -160,6 +206,7 @@ void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& 
         if (checkShipToAsteroidCollision(ship, baseAsteroids[i]))
         {
             removeShipLives(ship, 1);
+            std::cout << ship.lives << ": vidas";
             restartShip(ship);
 
             for (int j = 0; j < baseAsteroidsMax; j++)
@@ -177,7 +224,6 @@ void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& 
                 {
                     nextAsteroidsActive = 0;
                 }
-
                 activateAsteroid(nextAsteroids[nextAsteroidsActive], baseAsteroids[i], 1);
                 nextAsteroidsActive++;
                 activateAsteroid(nextAsteroids[nextAsteroidsActive], baseAsteroids[i], -1);
@@ -218,29 +264,59 @@ void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& as
     }
 }
 
+void updatePlayerStatus()
+{
+    if (player.score >= player.maxScore)
+        player.won = true;
+
+    if (ship.lives <= 0)
+        player.won = false;
+}
+
 void drawGame()
 {
     BeginDrawing();
     ClearBackground(BLACK);
 
-    for (int i = 0; i < bigAsteroidsMax; i++)
-        drawAsteroid(bigAsteroids[i]);
+    if (ship.isAlive && !player.won)
+    {
+        for (int i = 0; i < bigAsteroidsMax; i++)
+            drawAsteroid(bigAsteroids[i]);
 
-    for (int i = 0; i < medAsteroidsMax; i++)
-        drawAsteroid(medAsteroids[i]);
+        for (int i = 0; i < medAsteroidsMax; i++)
+            drawAsteroid(medAsteroids[i]);
 
-    for (int i = 0; i < smallAsteroidsMax; i++)
-        drawAsteroid(smallAsteroids[i]);
+        for (int i = 0; i < smallAsteroidsMax; i++)
+            drawAsteroid(smallAsteroids[i]);
 
-    for (int i = 0; i < maxBullets; i++)
-        drawBullet(bullet[i]);
+        for (int i = 0; i < maxBullets; i++)
+            drawBullet(bullet[i]);
 
-    drawShip(ship);
+        drawShip(ship);
 
-    printBackButton(true, pauseSize);
+        printBackButton(true, pauseSize);
+    }
 
     DrawTextEx(font, TextFormat("SCORE: %i", player.score), scoreTextPos, textSize, 0, textColor);
     DrawTextEx(font, TextFormat("LIVES: %i", ship.lives), hpTextPos, textSize, 0, textColor);
+
+    if (!ship.isAlive || player.won)
+    {
+        DrawTextEx(font, "GAME OVER", Vector2{ static_cast<float>(GetScreenWidth()) / 2 -
+                   MeasureTextEx(font, "GAME OVER", static_cast<float>(titleSize), 0).x / 2, 
+                   static_cast<float>(GetScreenHeight()) / 2 - MeasureTextEx(font, "GAME OVER", static_cast<float>(titleSize), 0).y }, static_cast<float>(titleSize), 0, textColor);
+
+        if (player.won)
+            DrawTextEx(font, "Congrats!! You won", { static_cast<float>(GetScreenWidth()) / 2 -
+                       MeasureTextEx(font, "Congrats!! You won", textSize, 0).x / 2, 
+                       static_cast<float>(GetScreenHeight()) / 2 + MeasureTextEx(font, "Congrats!! You won", textSize, 0).y },
+                       textSize, 0, textColor);
+        else
+            DrawTextEx(font, "You lost :c", { static_cast<float>(GetScreenWidth()) / 2 -
+                       MeasureTextEx(font, "You lost :c", textSize, 0).x / 2, 
+                       static_cast<float>(GetScreenHeight()) / 2 + MeasureTextEx(font, "You lost :c", textSize, 0).y },
+                       textSize, 0, textColor);
+    }
 
     EndDrawing();
 }

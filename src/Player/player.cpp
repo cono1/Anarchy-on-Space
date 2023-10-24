@@ -5,13 +5,9 @@ namespace game
 void initPlayer(Player& player)
 {
 	player.score = 0;
-	player.maxScore = 1000;
+	player.maxScore = 1500;
+	player.won = false;
 }
-
-//void updatePlayer(Player& player)
-//{
-//
-//}
 
 void addScore(Player& player, int score)
 {
@@ -23,8 +19,9 @@ void removeScore(Player& player, int score)
 	player.score -= score;
 }
 
-void deinitPlayer(Player& player)
+void resetPlayer(Player& player)
 {
 	player.score = 0;
+	player.won = false;
 }
 }
