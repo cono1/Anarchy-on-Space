@@ -7,6 +7,7 @@
 namespace game
 {
 const int maxMenuRects = 4;
+const int maxGameOverRects = 2;
 static MenuRect menuRect[maxMenuRects];
 static MenuRect pauseRect;
 
@@ -40,7 +41,7 @@ void initMenu(const int screenWidth)
 void updateMenu(CurrentScreen& currentScreen)
 {
 	if (checkMenuInput(PLAY))
-		currentScreen = PLAY;	
+		currentScreen = PLAY;
 
 	if (checkMenuInput(PAUSE))
 		currentScreen = PAUSE;
@@ -55,7 +56,28 @@ void updateMenu(CurrentScreen& currentScreen)
 		currentScreen = EXIT;
 }
 
-void printMenu(std::string title, int titleSize, int optionsSize)
+void updateMenu(CurrentScreen& currentScreen, bool& playAgain)
+{
+	if (checkMenuInput(PLAY))
+	{
+		currentScreen = PLAY;
+		playAgain = true;
+	}
+
+	if (checkMenuInput(PAUSE))
+		currentScreen = PAUSE;
+
+	if (checkMenuInput(RULES))
+		currentScreen = RULES;
+
+	if (checkMenuInput(CREDITS))
+		currentScreen = CREDITS;
+
+	if (checkMenuInput(EXIT))
+		currentScreen = EXIT;
+}
+
+void printMenu(std::string title, std::string firstOption, int titleSize, int optionsSize)
 {
 	DrawText(TextFormat(title.c_str()), (GetScreenWidth() - MeasureText(title.c_str(), titleSize)) / 2, 100, titleSize, YELLOW);
 
@@ -67,7 +89,7 @@ void printMenu(std::string title, int titleSize, int optionsSize)
 							   static_cast<int>(menuRect[i].height), GOLD, DARKBROWN);
 
 		if (i == PLAY)
-			writeOnMenuSquare("PLAY", i, optionsSize);
+			writeOnMenuSquare(firstOption, i, optionsSize);
 		
 		if (i == RULES)
 			writeOnMenuSquare("HOW TO PLAY", i, optionsSize);
@@ -115,7 +137,6 @@ bool checkCollision(MenuRect& menuRec, float initWidth, float maxWidth)
 		return false;
 	}
 }
-
 
 void printBackButton(bool pause, int fontSize)
 {

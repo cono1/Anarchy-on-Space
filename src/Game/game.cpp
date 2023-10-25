@@ -20,7 +20,7 @@ void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& 
 void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
 void updatePlayerStatus();
 void drawGame();
-void drawMenu(std::string title);
+void drawMenu(std::string title, std::string firstOption);
 void deinit();
 
 bool runGame = true;
@@ -30,8 +30,8 @@ static int optionsSize = 50;
 static int pauseSize = 25;
 static float textSize = 50;
 static Color textColor = MAGENTA;
-Vector2 scoreTextPos;
-Vector2 hpTextPos;
+static Vector2 scoreTextPos;
+static Vector2 hpTextPos;
 
 static const int maxBullets = 5;
 static const int bigAsteroidsMax = 4;
@@ -61,7 +61,7 @@ void loop()
 
 void init()
 {
-    InitWindow(1024, 768, "Asteroids");
+    InitWindow(1024, 768, "Anarchy on space");
 
     font = LoadFontEx("res/BebasNeue-Regular.ttf", 150, 0, 550);
     scoreTextPos.x = static_cast<float>(GetScreenWidth()) - (MeasureTextEx(font, "SCORE: 00000", textSize, 0).x);
@@ -111,11 +111,11 @@ void loopScreens()
             break;
         case MENU:
             updateMenu(currentScreen);
-            drawMenu("ANARCHY ON SPACE");
+            drawMenu("ANARCHY ON SPACE", "PLAY");
             break;
         case PAUSE:
             updateMenu(currentScreen);
-            drawMenu("PAUSED");
+            drawMenu("PAUSED", "RESUME");
             break;
         default:
             break;
@@ -125,6 +125,8 @@ void loopScreens()
 
 void updateGame()
 {
+    bool playAgain = false;
+
     if (ship.isAlive && !player.won)
     {
         if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
@@ -156,13 +158,12 @@ void updateGame()
         updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive,
             smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
         updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
-
     }
     
     if (!ship.isAlive || player.won)
     {
-        //runGame = true;
-        if (IsKeyPressed(KEY_A))
+        updateMenu(currentScreen, playAgain);
+        if (playAgain)
         {
             runGame = true;
             for (int i = 0; i < bigAsteroidsMax; i++)
@@ -170,29 +171,29 @@ void updateGame()
                 bigAsteroids[i].active = true;
                 restartAsteroids(bigAsteroids[i]);
             }
+
             for (int i = 0; i < medAsteroidsMax; i++)
             {
                 medAsteroids[i].active = false;
 
             }
+
             for (int i = 0; i < smallAsteroidsMax; i++)
             {
                 smallAsteroids[i].active = false;
 
             }
+
             for (int j = 0; j < maxBullets; j++)
             {
                 deActivateBullet(bullet[j]);
             }
+
             restartShip(ship);
             ship.lives = ship.maxLives;
             resetPlayer(player);
         }
-        else if (IsKeyPressed(KEY_B))
-        {
-            runGame = false;
-            currentScreen = EXIT;
-        }
+        playAgain = false;
     }  
 }
 
@@ -220,10 +221,9 @@ void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& 
                 deActivateBullet(bullet[j]);
                 baseAsteroidsActive--;
 
-                if (nextAsteroidsActive > nextAsteroidsMax)
-                {
+                if (nextAsteroidsActive > nextAsteroidsMax)               
                     nextAsteroidsActive = 0;
-                }
+                
                 activateAsteroid(nextAsteroids[nextAsteroidsActive], baseAsteroids[i], 1);
                 nextAsteroidsActive++;
                 activateAsteroid(nextAsteroids[nextAsteroidsActive], baseAsteroids[i], -1);
@@ -302,30 +302,21 @@ void drawGame()
 
     if (!ship.isAlive || player.won)
     {
-        DrawTextEx(font, "GAME OVER", Vector2{ static_cast<float>(GetScreenWidth()) / 2 -
-                   MeasureTextEx(font, "GAME OVER", static_cast<float>(titleSize), 0).x / 2, 
-                   static_cast<float>(GetScreenHeight()) / 2 - MeasureTextEx(font, "GAME OVER", static_cast<float>(titleSize), 0).y }, static_cast<float>(titleSize), 0, textColor);
-
-        if (player.won)
-            DrawTextEx(font, "Congrats!! You won", { static_cast<float>(GetScreenWidth()) / 2 -
-                       MeasureTextEx(font, "Congrats!! You won", textSize, 0).x / 2, 
-                       static_cast<float>(GetScreenHeight()) / 2 + MeasureTextEx(font, "Congrats!! You won", textSize, 0).y },
-                       textSize, 0, textColor);
+        if (player.won)      
+            printMenu("Congrats!! You won", "PLAY AGAIN", titleSize, optionsSize);
+        
         else
-            DrawTextEx(font, "You lost :c", { static_cast<float>(GetScreenWidth()) / 2 -
-                       MeasureTextEx(font, "You lost :c", textSize, 0).x / 2, 
-                       static_cast<float>(GetScreenHeight()) / 2 + MeasureTextEx(font, "You lost :c", textSize, 0).y },
-                       textSize, 0, textColor);
+            printMenu("You lost :c", "PLAY AGAIN", titleSize, optionsSize);
     }
 
     EndDrawing();
 }
 
-void drawMenu(std::string title)
+void drawMenu(std::string title, std::string firstOption)
 {
     BeginDrawing();
     ClearBackground(BLACK);
-    printMenu(title, titleSize, optionsSize);
+    printMenu(title, firstOption, titleSize, optionsSize);
     EndDrawing();
 }
 
