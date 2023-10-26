@@ -16,7 +16,8 @@ namespace game
 void init();
 void loopScreens();
 void updateGame();
-void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,                                                   Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive);
+void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,                                                  
+                           Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive);
 void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
 void updatePlayerStatus();
 void drawGame();
