@@ -1,5 +1,5 @@
 #include "ship.h"
-
+#include <iostream>
 #include <raymath.h>   
 
 namespace game
@@ -20,6 +20,7 @@ void initShip(Ship& ship)
     ship.acceleration.x = 0;
     ship.acceleration.y = 0;
     ship.radius = static_cast<float>(ship.texture.width / 2);
+    ship.speed = 300;
     ship.lives = 3;
     ship.maxLives = 3;
     ship.isAlive = true;
@@ -101,12 +102,12 @@ void moveShip(Ship& ship)
     if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
     {
         ship.dir = Vector2Normalize(ship.dir);
-        ship.acceleration.x -= ship.dir.x;
-        ship.acceleration.y -= ship.dir.y;
+        ship.acceleration.x -= ship.dir.x * GetFrameTime();
+        ship.acceleration.y -= ship.dir.y * GetFrameTime();
     }
 
-    ship.pos.x += ship.acceleration.x * GetFrameTime();
-    ship.pos.y += ship.acceleration.y * GetFrameTime();
+    ship.pos.x += (ship.acceleration.x * ship.speed) * GetFrameTime();
+    ship.pos.y += (ship.acceleration.y * ship.speed) * GetFrameTime();
 }
 
 void checkShipLimits(Ship& ship)

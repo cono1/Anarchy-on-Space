@@ -12,6 +12,7 @@ struct Ship
 	Vector2 acceleration;
 	float rotation;
 	float radius;
+	int speed;
 	int lives;
 	int maxLives;
 	bool isAlive;

@@ -32,8 +32,8 @@ void updateBullet(Bullet& bullet)
 {
     if (bullet.active)
     {
-        bullet.r.x += bullet.dir.x * bullet.speed * GetFrameTime();
-        bullet.r.y += bullet.dir.y * bullet.speed * GetFrameTime();
+        bullet.r.x += (bullet.dir.x * bullet.speed) * GetFrameTime();
+        bullet.r.y += (bullet.dir.y * bullet.speed) * GetFrameTime();
 
         if (bullet.r.x < 0 || bullet.r.x > GetScreenWidth() ||
             bullet.r.y < 0 || bullet.r.y > GetScreenHeight())
