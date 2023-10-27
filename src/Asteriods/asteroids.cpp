@@ -97,7 +97,7 @@ void checkAsteroidLimits(Asteroid& asteroid)
 void initBigAsteroid(Asteroid& asteroid)
 {
 	asteroid.texture = LoadTexture("res/TempAsteroid.png");
-	asteroid.pos = GetRandomPositionNearEdges(200);
+	asteroid.pos = getRandomPositionNearEdges(200);
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-70, 70));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-70, 70));
 	asteroid.dir = Vector2Normalize(asteroid.dir);

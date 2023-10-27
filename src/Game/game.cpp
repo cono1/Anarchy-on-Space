@@ -45,6 +45,7 @@ static int smallAsteroidsActive = 0;
 
 static Bullet bullet[maxBullets];
 static Ship ship;
+static Ship enemyShip;
 static Asteroid bigAsteroids[bigAsteroidsMax];
 static Asteroid medAsteroids[medAsteroidsMax];
 static Asteroid smallAsteroids[smallAsteroidsMax];
@@ -72,6 +73,7 @@ void init()
 
     initPlayer(player);
     initShip(ship);
+    initEnemyShip(enemyShip);
 
     for (int i = 0; i < maxBullets; i++)
         initBullet(bullet[i], ship.pos, ship.texture.width, ship.texture.height);
@@ -138,6 +140,7 @@ void updateGame()
         updatePlayerStatus();
 
         updateShip(ship);
+        updateEnemyShip(enemyShip, ship);
 
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && !isPausePressed())
         {
@@ -294,6 +297,7 @@ void drawGame()
             drawBullet(bullet[i]);
 
         drawShip(ship);
+        drawShip(enemyShip);
 
         printBackButton(true, pauseSize);
     }
@@ -328,6 +332,7 @@ void deinit()
         deInitAsteroid(bigAsteroids[i]);
 
     deInitShip(ship);
+    deInitShip(enemyShip);
     CloseWindow();
 }
 }

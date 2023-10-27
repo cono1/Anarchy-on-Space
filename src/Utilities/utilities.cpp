@@ -4,7 +4,7 @@
 
 namespace game
 {
-Vector2 GetRandomPositionNearEdges(int margin)
+Vector2 getRandomPositionNearEdges(int margin)
 {
     Vector2 pos = { 0,0 };
     int windowWidth = GetScreenWidth();

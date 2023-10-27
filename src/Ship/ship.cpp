@@ -1,11 +1,16 @@
 #include "ship.h"
+
 #include <iostream>
+
 #include <raymath.h>   
+
+#include "Utilities/utilities.h"
 
 namespace game
 {
 void rotateShip(Ship& ship);
 void moveShip(Ship& ship);
+void moveEnemyShip(Ship& ship, Ship player);
 void checkShipLimits(Ship& ship);
 void checkShipIsAlive(Ship& ship);
 
@@ -26,6 +31,22 @@ void initShip(Ship& ship)
     ship.isAlive = true;
 }
 
+void initEnemyShip(Ship& ship)
+{
+    ship.texture = LoadTexture("res/TempShip.png");
+    ship.pos = getRandomPositionNearEdges(100);
+    ship.dir.x = 0;
+    ship.dir.y = 0;
+    ship.rotation = 0;
+    ship.acceleration.x = static_cast<float>(GetRandomValue(-2, 2));
+    ship.acceleration.y = static_cast<float>(GetRandomValue(-2, 2));
+    ship.radius = static_cast<float>(ship.texture.width / 2);
+    ship.speed = 150.f;
+    ship.lives = 2;
+    ship.maxLives = 2;
+    ship.isAlive = true;
+}
+
 void restartShip(Ship& ship)
 {
     ship.pos.x = static_cast<float>(GetScreenWidth()) / 2;
@@ -33,8 +54,8 @@ void restartShip(Ship& ship)
     ship.dir.x = 15;
     ship.dir.y = 15;
     ship.rotation = 0;
-    ship.acceleration.x = 0;
-    ship.acceleration.y = 0;
+    ship.acceleration.x = 0.1f;
+    ship.acceleration.y = 0.1f;
     ship.isAlive = true;
 }
 
@@ -42,6 +63,15 @@ void updateShip(Ship& ship)
 {
     rotateShip(ship);
     moveShip(ship);
+
+    checkShipLimits(ship);
+    checkShipIsAlive(ship);
+}
+
+void updateEnemyShip(Ship& ship, Ship player)
+{
+    moveEnemyShip(ship, player);
+
     checkShipLimits(ship);
     checkShipIsAlive(ship);
 }
@@ -108,6 +138,30 @@ void moveShip(Ship& ship)
 
     ship.pos.x += (ship.acceleration.x * ship.speed) * GetFrameTime();
     ship.pos.y += (ship.acceleration.y * ship.speed) * GetFrameTime();
+}
+
+void moveEnemyShip(Ship& ship, Ship player)
+{
+    ship.dir = player.pos;
+    ship.dir = Vector2Normalize(ship.dir);
+
+    if (player.pos.x >= GetScreenWidth() / 2)
+    {
+        ship.pos.x += (ship.dir.x * ship.speed) * GetFrameTime();
+    }
+    else if (player.pos.x < GetScreenWidth() / 2)
+    {
+        ship.pos.x -= (ship.dir.x * ship.speed) * GetFrameTime();
+    }
+    
+    if (player.pos.y >= GetScreenHeight() / 2)
+    {
+        ship.pos.y += (ship.dir.y * ship.speed) * GetFrameTime();
+    }
+    else if (player.pos.y < GetScreenHeight() / 2)
+    {
+        ship.pos.y -= (ship.dir.y * ship.speed) * GetFrameTime();
+    }
 }
 
 void checkShipLimits(Ship& ship)

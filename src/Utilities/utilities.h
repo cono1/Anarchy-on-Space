@@ -4,5 +4,5 @@
 
 namespace game
 {
-Vector2 GetRandomPositionNearEdges(int margin);
+Vector2 getRandomPositionNearEdges(int margin);
 }
