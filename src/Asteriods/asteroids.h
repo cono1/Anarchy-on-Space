@@ -13,6 +13,7 @@ struct Asteroid
 	Vector2 dir;
 	float radius;
 	float rotation;
+	float speed;
 	bool active;
 	int points;
 };

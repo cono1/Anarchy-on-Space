@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include <raymath.h>
+
 #include "Utilities/utilities.h"
 
 namespace game
@@ -36,8 +38,7 @@ void restartAsteroids(Asteroid& asteroid)
 	asteroid.pos.y = 0;
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-100, 100));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-100, 100));
-	//asteroid.radius = 0;
-	//asteroid.rotation = 0;
+	asteroid.dir = Vector2Normalize(asteroid.dir);
 }
 
 void updateAsteroid(Asteroid& asteroid)
@@ -45,8 +46,8 @@ void updateAsteroid(Asteroid& asteroid)
 	if (asteroid.active)
 	{
 		checkAsteroidLimits(asteroid);
-		asteroid.pos.x += asteroid.dir.x * GetFrameTime();
-		asteroid.pos.y += asteroid.dir.y * GetFrameTime();
+		asteroid.pos.x += (asteroid.dir.x * asteroid.speed) * GetFrameTime();
+		asteroid.pos.y += (asteroid.dir.y * asteroid.speed) * GetFrameTime();
 		asteroid.rotation += 10 * GetFrameTime();
 	}
 }
@@ -99,8 +100,10 @@ void initBigAsteroid(Asteroid& asteroid)
 	asteroid.pos = GetRandomPositionNearEdges(200);
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-70, 70));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-70, 70));
+	asteroid.dir = Vector2Normalize(asteroid.dir);
 	asteroid.radius = static_cast<float>(asteroid.texture.width / 2);
 	asteroid.rotation = 0;
+	asteroid.speed = 50.f;
 	asteroid.active = true;
 	asteroid.points = 20;
 }
@@ -111,8 +114,10 @@ void initMedAsteroid(Asteroid& asteroid)
 	asteroid.pos.y = 0;
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-100, 100));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-100, 100));
+	asteroid.dir = Vector2Normalize(asteroid.dir);
 	asteroid.radius = 0;
 	asteroid.rotation = 0;
+	asteroid.speed = 80.f;
 	asteroid.active = false;
 	asteroid.points = 50;
 }
@@ -124,8 +129,10 @@ void initSmallAsteroid(Asteroid& asteroid)
 	asteroid.pos.y = 0;
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-120, 120));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-120, 120));
+	asteroid.dir = Vector2Normalize(asteroid.dir);
 	asteroid.radius = 0;
 	asteroid.rotation = 0;
+	asteroid.speed = 120.f;
 	asteroid.active = false;
 	asteroid.points = 100;
 }
