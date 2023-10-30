@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Ship/ship.h"
-#include "Asteriods/asteroids.h"
+#include "Asteroids/asteroids.h"
 #include "Bullets/bullets.h"
 
 namespace game
