@@ -16,7 +16,7 @@ void checkShipIsAlive(Ship& ship);
 
 void initShip(Ship& ship)
 {
-    ship.texture = LoadTexture("res/TempShip.png");
+    ship.texture = LoadTexture("res/conoShip.png");
     ship.pos.x = static_cast<float>(GetScreenWidth() / 2);
     ship.pos.y = static_cast<float>(GetScreenHeight() / 2);
     ship.dir.x = 15;

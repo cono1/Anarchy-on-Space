@@ -1,7 +1,7 @@
 #include "gameplay.h"
 
 #include <iostream>
-#include <time.h>
+#include <ctime>
 
 #include <raylib.h>
 

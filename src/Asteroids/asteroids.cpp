@@ -96,7 +96,7 @@ void checkAsteroidLimits(Asteroid& asteroid)
 
 void initBigAsteroid(Asteroid& asteroid)
 {
-	asteroid.texture = LoadTexture("res/TempAsteroid.png");
+	asteroid.texture = LoadTexture("res/while(true).png");
 	asteroid.pos = getRandomPositionNearEdges(200);
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-70, 70));
 	asteroid.dir.y = static_cast<float>(GetRandomValue(-70, 70));
@@ -109,7 +109,7 @@ void initBigAsteroid(Asteroid& asteroid)
 }
 void initMedAsteroid(Asteroid& asteroid)
 {
-	asteroid.texture = LoadTexture("res/TempMedAsteroid.png");
+	asteroid.texture = LoadTexture("res/onion.png");
 	asteroid.pos.x = 0;
 	asteroid.pos.y = 0;
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-100, 100));
@@ -124,7 +124,7 @@ void initMedAsteroid(Asteroid& asteroid)
 
 void initSmallAsteroid(Asteroid& asteroid)
 {
-	asteroid.texture = LoadTexture("res/TempSmallAsteroid.png");
+	asteroid.texture = LoadTexture("res/cap.png");
 	asteroid.pos.x = 0;
 	asteroid.pos.y = 0;
 	asteroid.dir.x = static_cast<float>(GetRandomValue(-120, 120));
