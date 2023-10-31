@@ -5,7 +5,7 @@ namespace game
 void initPlayer(Player& player)
 {
 	player.score = 0;
-	player.maxScore = 1500;
+	player.maxScore = 10000;
 	player.won = false;
 }
 

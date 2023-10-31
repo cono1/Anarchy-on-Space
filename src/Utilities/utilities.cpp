@@ -37,4 +37,20 @@ Vector2 getRandomPositionNearEdges(int margin)
     }
     return pos;
 }
+
+void startTimer(Timer& timer)
+{
+    timer.start = std::clock();
+}
+
+void stopTimer(Timer& timer)
+{
+    timer.end = std::clock();
+}
+
+double getTimeElapsed(Timer timer)
+{
+    // Calculate the elapsed time in milliseconds
+    return 1000.0 * (timer.end - timer.start) / CLOCKS_PER_SEC;
+}
 }

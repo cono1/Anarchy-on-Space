@@ -5,6 +5,7 @@
 
 #include <raylib.h>
 
+#include "Utilities/utilities.h"
 #include "Asteroids/asteroids.h"
 #include "Player/player.h"
 #include "Ship/ship.h"
@@ -31,12 +32,17 @@ static Asteroid bigAsteroids[bigAsteroidsMax];
 static Asteroid medAsteroids[medAsteroidsMax];
 static Asteroid smallAsteroids[smallAsteroidsMax];
 static Player player;
+static Timer timer;
+
+static int waitTimeForNewAsteroid = 10000;
+static int decreaseWaitTimeForNewAsteroid = 800;
 
 extern CurrentScreen currentScreen;
 extern bool shouldRunGame;
 
 void updateGame();
 void drawGame();
+void respawnAsteroidsAfterTime();
 void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,
     Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive);
 void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
@@ -45,6 +51,7 @@ void updatePlayerStatus();
 void initGame()
 {
     SetRandomSeed(static_cast<unsigned int>(time(NULL)));
+    startTimer(timer);
     initPlayer(player);
     initShip(ship);
     initEnemyShip(enemyShip);
@@ -107,6 +114,8 @@ void updateGame()
         updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive,
             smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
         updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+
+        respawnAsteroidsAfterTime();
     }
 
     if (!ship.isAlive || player.won)
@@ -143,6 +152,26 @@ void updateGame()
             resetPlayer(player);
         }
         playAgain = false;
+    }
+}
+
+void respawnAsteroidsAfterTime()
+{
+    stopTimer(timer);
+    for (int i = 0; i < bigAsteroidsMax; i++)
+    {
+        if (getTimeElapsed(timer) >= waitTimeForNewAsteroid && !bigAsteroids[i].active)
+        {
+            bigAsteroids[i].active = true;
+            restartAsteroids(bigAsteroids[i]);
+
+            waitTimeForNewAsteroid -= decreaseWaitTimeForNewAsteroid;
+            while (waitTimeForNewAsteroid <= 0)
+            {
+                waitTimeForNewAsteroid += 100;
+            }
+            startTimer(timer);
+        }
     }
 }
 
