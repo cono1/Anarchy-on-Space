@@ -35,9 +35,12 @@ static Asteroid smallAsteroids[smallAsteroidsMax];
 static Player player;
 
 static Timer timer;
+static double enemyTimer;
 
-static int waitTimeForNewAsteroid = 10000;
+static int waitTimeForNewAsteroid = 9500;
 static int decreaseWaitTimeForNewAsteroid = 800;
+static int waitTimeForEnemy = 70000;
+static int pointsForEnemy;
 
 extern CurrentScreen currentScreen;
 extern bool shouldRunGame;
@@ -48,6 +51,7 @@ void respawnAsteroidsAfterTime();
 void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& baseAsteroidsActive,
     Asteroid nextAsteroids[], int nextAsteroidsMax, int& nextAsteroidsActive);
 void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& asteroidsActive);
+void updateEnemyStatus();
 void updatePlayerStatus();
 
 void initGame()
@@ -55,9 +59,12 @@ void initGame()
     SetRandomSeed(static_cast<unsigned int>(time(NULL)));
 
     startTimer(timer);
+    enemyTimer = 0;
     initPlayer(player);
     initShip(ship);
     initEnemyShip(enemyShip);
+
+    pointsForEnemy = 10;
 
     for (int i = 0; i < maxBullets; i++)
         initBullet(bullet[i], ship.pos, ship.texture.width, ship.texture.height);
@@ -83,6 +90,7 @@ void runGame()
 
 void updateGame()
 {
+    enemyTimer++;
     playGameMusic();
     UpdateMusicStream(getGameMusic());
 
@@ -123,6 +131,8 @@ void updateGame()
         updateAsteroidsStatus(medAsteroids, medAsteroidsMax, medAsteroidsActive,
             smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
         updateAsteroidsStatus(smallAsteroids, smallAsteroidsMax, smallAsteroidsActive);
+        
+        updateEnemyStatus();
 
         respawnAsteroidsAfterTime();
     }
@@ -132,7 +142,10 @@ void updateGame()
         updateMenu(currentScreen, playAgain);
         if (playAgain)
         {
-            shouldRunGame = true;
+            enemyTimer = 0;
+            enemyShip.lives = enemyShip.maxLives;
+            shouldRunGame = true;           
+            waitTimeForNewAsteroid = 9500;
             for (int i = 0; i < bigAsteroidsMax; i++)
             {
                 bigAsteroids[i].active = true;
@@ -250,6 +263,44 @@ void updateAsteroidsStatus(Asteroid asteroids[], const int maxAsteroids, int& as
                 asteroids[i].active = false;
             }
         }
+    }
+}
+
+void updateEnemyStatus()
+{
+    if (enemyTimer >= waitTimeForEnemy && enemyShip.lives > 0)
+    {
+        enemyShip.isAlive = true;
+    }
+
+    for (int i = 0; i < maxBullets; i++)
+    {
+        if (checkBulletToShipCollision(enemyShip, bullet[i]))
+        {
+            deActivateBullet(bullet[i]);
+            removeShipLives(enemyShip, 1);
+            addScore(player, pointsForEnemy);
+        }
+    }
+
+    if (checkShipToShipCollision(ship, enemyShip))
+    {
+        removeShipLives(ship, 1);
+        restartShip(ship);
+        restartEnemyShip(enemyShip);
+    }
+
+    if (!enemyShip.isAlive && enemyShip.lives <= 0)
+    {
+        enemyTimer = 0;
+        enemyShip.lives = enemyShip.maxLives;
+    }
+
+    if (!enemyShip.isAlive && enemyTimer >= waitTimeForEnemy)
+    {
+        enemyTimer = 0;
+        enemyShip.lives = enemyShip.maxLives;
+        enemyShip.isAlive = true;
     }
 }
 

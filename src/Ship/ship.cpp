@@ -33,8 +33,8 @@ void initShip(Ship& ship)
 
 void initEnemyShip(Ship& ship)
 {
-    ship.texture = LoadTexture("res/TempShip.png");
-    ship.pos = getRandomPositionNearEdges(100);
+    ship.texture = LoadTexture("res/enemyShip.png");
+    ship.pos = getRandomPositionNearEdges(50);
     ship.dir.x = 0;
     ship.dir.y = 0;
     ship.rotation = 0;
@@ -42,9 +42,9 @@ void initEnemyShip(Ship& ship)
     ship.acceleration.y = static_cast<float>(GetRandomValue(-2, 2));
     ship.radius = static_cast<float>(ship.texture.width / 2);
     ship.speed = 150.f;
-    ship.lives = 2;
-    ship.maxLives = 2;
-    ship.isAlive = true;
+    ship.lives = 5;
+    ship.maxLives = 5;
+    ship.isAlive = false;
 }
 
 void restartShip(Ship& ship)
@@ -57,6 +57,11 @@ void restartShip(Ship& ship)
     ship.acceleration.x = 0.1f;
     ship.acceleration.y = 0.1f;
     ship.isAlive = true;
+}
+
+void restartEnemyShip(Ship& ship)
+{
+    ship.pos = getRandomPositionNearEdges(50);
 }
 
 void updateShip(Ship& ship)

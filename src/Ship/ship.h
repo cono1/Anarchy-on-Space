@@ -21,6 +21,7 @@ struct Ship
 void initShip(Ship& ship);
 void initEnemyShip(Ship& ship);
 void restartShip(Ship& ship);
+void restartEnemyShip(Ship& ship);
 void updateShip(Ship& ship);
 void updateEnemyShip(Ship& ship, Ship player);
 void drawShip(Ship ship);
