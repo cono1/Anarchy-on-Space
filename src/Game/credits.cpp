@@ -3,6 +3,8 @@
 #include <iostream>
 
 #include "printer.h"
+#include "menu.h"
+#include "Sound/sound.h"
 
 namespace game
 {
@@ -11,6 +13,7 @@ static Color textColor;
 static int centerX;
 static float creditsSize;
 static Vector2 mousePos;
+extern CurrentScreen currentScreen;
 
 Credits dev;
 Credits art1;
@@ -26,13 +29,16 @@ void initCredits();
 void calculateCreditsPosition(Vector2& textPos, std::string text, Vector2 previousTextPos);
 void calculateCreditsBox(Rectangle& rect, Vector2 textPos, std::string text);
 void openURL(Rectangle rect, std::string url);
+void updateCreditStatus();
 void drawCredits(std::string text, Vector2 pos);
 
 void printCredits()
 {
+	int backSize = getPauseSize();
 	initCredits();
-	initDrawing();
 
+	updateCreditStatus();
+	
 	openURL(art2.rect, art2.url);
 	openURL(music1.rect, music1.url);
 	openURL(music2.rect, music2.url);
@@ -40,6 +46,8 @@ void printCredits()
 	openURL(sound2.rect, sound2.url);
 	openURL(sound4.rect, sound4.url);
 
+	initDrawing();
+	printBackButton(false, backSize);
 
 	drawCredits(dev.text, dev.pos);
 	drawCredits(art1.text, art1.pos);
@@ -52,8 +60,8 @@ void printCredits()
 	drawCredits(sound2.text, sound2.pos);
 	drawCredits(sound3.text, sound3.pos);
 	drawCredits(sound4.text, sound4.pos);
-
 	endDrawing();
+
 }
 
 void initCredits()
@@ -125,6 +133,16 @@ void openURL(Rectangle rect, std::string url)
 	if (CheckCollisionPointRec(mousePos, rect) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
 	{
 		OpenURL(url.c_str());
+	}
+}
+
+void updateCreditStatus()
+{
+	if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+	{
+		currentScreen = MENU;
+		currentScreen = PAUSE;
+		playButtonSound();
 	}
 }
 

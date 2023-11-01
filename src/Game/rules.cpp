@@ -5,16 +5,22 @@
 #include <raylib.h>
 
 #include "printer.h"
+#include "menu.h"
 #include "Player/player.h"
+#include "Sound/sound.h"
 
 namespace game
 {
+extern CurrentScreen currentScreen;
+
 void calculateRulesPosition(Vector2& pos, std::string text, Vector2 previousPos, float size);
+void updateStatus();
 void drawRules(std::string text, Vector2 pos, float size);
 
 void printHowToPlay()
 {
 	Font font = getFont();
+	int backSize = getPauseSize();
 	float size = static_cast<float>(getOptionsSize());
 	Color color = getTextColor();
 	std::string points = std::to_string(getMaxScore());
@@ -40,14 +46,16 @@ void printHowToPlay()
 	Vector2 winPos;
 	calculateRulesPosition(winPos, winText, lifePos, size);
 
+	updateStatus();
+
 	initDrawing();
+	printBackButton(false, backSize);
 
 	drawRules(movementText, movPos, size);
 	drawRules(shootText, shootPos, size);
 	drawRules(objectiveText, objectivePos, size - 5);
 	drawRules(lifeText, lifePos, size);
 	drawRules(winText, winPos, size);
-
 	endDrawing();
 }
 
@@ -55,6 +63,16 @@ void calculateRulesPosition(Vector2& pos, std::string text, Vector2 previousPos,
 {
 	pos.x = GetScreenWidth() / 2 - (MeasureTextEx(getFont(), text.c_str(), size, 0).x) / 2;
 	pos.y = previousPos.y + MeasureTextEx(getFont(), text.c_str(), size, 0).y + 20;
+}
+
+void updateStatus()
+{
+	if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+	{
+		currentScreen = MENU;
+		currentScreen = PAUSE;
+		playButtonSound();
+	}
 }
 
 void drawRules(std::string text, Vector2 pos, float size)
