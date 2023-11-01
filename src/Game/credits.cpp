@@ -90,7 +90,7 @@ void initCredits()
 	calculateCreditsBox(music1.rect, music1.pos, music1.text);
 
 	music2.text = "October and Twenty Three by Steven F Allen";
-	music2.url = "https://freesound.org/people/furbyguy/sounds/370352/";
+	music2.url = "https://freesound.org/people/audiomirage/sounds/706735/";
 	calculateCreditsPosition(music2.pos, music2.text, music1.pos);
 	calculateCreditsBox(music2.rect, music2.pos, music2.text);
 
