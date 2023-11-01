@@ -5,6 +5,7 @@
 #include <raylib.h>
 
 #include "gameplay.h"
+#include "credits.h"
 #include "menu.h"
 #include "printer.h"
 #include "Sound/sound.h"
@@ -34,7 +35,7 @@ void init()
     initAudio();
     SetMusicVolume(getMenuMusic(), 0.2f);
     SetMusicVolume(getGameMusic(), 0.2f);
-    SetSoundVolume(getLooseHpSound(), 0.9f);
+    SetSoundVolume(getLooseHpSound(), 1.0f);
     SetSoundVolume(getButtonSound(), 0.9f);
 
     initPrinter();
@@ -55,6 +56,7 @@ void loopScreens()
             shouldRunGame = false;
             break;
         case CREDITS:
+            printCredits();
             break;
         case RULES:
             break;

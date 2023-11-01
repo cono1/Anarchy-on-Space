@@ -85,7 +85,6 @@ void updateMenu(CurrentScreen& currentScreen, bool& playAgain)
 	if (checkMenuInput(PAUSE))
 		currentScreen = PAUSE;
 	
-
 	if (checkMenuInput(RULES))
 		currentScreen = RULES;	
 

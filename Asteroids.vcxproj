@@ -22,6 +22,7 @@
     <ClCompile Include="src\Asteroids\asteroids.cpp" />
     <ClCompile Include="src\Bullets\bullets.cpp" />
     <ClCompile Include="src\Game\collisionManager.cpp" />
+    <ClCompile Include="src\Game\credits.cpp" />
     <ClCompile Include="src\Game\game.cpp" />
     <ClCompile Include="src\Game\gameplay.cpp" />
     <ClCompile Include="src\Game\menu.cpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="src\Asteroids\asteroids.h" />
     <ClInclude Include="src\Bullets\bullets.h" />
     <ClInclude Include="src\Game\collisionManager.h" />
+    <ClInclude Include="src\Game\credits.h" />
     <ClInclude Include="src\Game\game.h" />
     <ClInclude Include="src\Game\gameplay.h" />
     <ClInclude Include="src\Game\menu.h" />

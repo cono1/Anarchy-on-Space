@@ -1,7 +1,5 @@
 #include "printer.h"
 
-#include <raylib.h>
-
 namespace game
 {
 static Font font;
@@ -22,6 +20,12 @@ void initPrinter()
 	hpTextPos.y = scoreTextPos.y + MeasureTextEx(font, "LIVES: 00", textSize, 0).y;
 }
 
+void initDrawing()
+{
+	BeginDrawing();
+	ClearBackground(BLACK);
+}
+
 void printScore(int score)
 {
 	DrawTextEx(font, TextFormat("SCORE: %i", score), scoreTextPos, textSize, 0, textColor);
@@ -30,6 +34,16 @@ void printScore(int score)
 void printLives(int lives)
 {
 	DrawTextEx(font, TextFormat("LIVES: %i", lives), hpTextPos, textSize, 0, textColor);
+}
+
+Font getFont()
+{
+	return font;
+}
+
+Color getTextColor()
+{
+	return textColor;
 }
 
 int getTitleSize()
@@ -45,6 +59,11 @@ int getOptionsSize()
 int getPauseSize()
 {
 	return pauseSize;
+}
+
+void endDrawing()
+{
+	EndDrawing();
 }
 
 void deinitPrinter()
