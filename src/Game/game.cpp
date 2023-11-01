@@ -7,6 +7,7 @@
 #include "gameplay.h"
 #include "menu.h"
 #include "printer.h"
+#include "Sound/sound.h"
 
 namespace game
 {
@@ -30,6 +31,12 @@ void init()
 {
     InitWindow(1024, 768, "Anarchy on space");
   
+    initAudio();
+    SetMusicVolume(getMenuMusic(), 0.2f);
+    SetMusicVolume(getGameMusic(), 0.2f);
+    SetSoundVolume(getLooseHpSound(), 0.9f);
+    SetSoundVolume(getButtonSound(), 0.9f);
+
     initPrinter();
     initMenu(GetScreenWidth());
 
@@ -40,6 +47,8 @@ void loopScreens()
 {
     while (!WindowShouldClose() && shouldRunGame)
     {
+        playMenuSound();
+        UpdateMusicStream(getMenuMusic());
         switch (currentScreen)
         {
         case EXIT:
@@ -50,6 +59,7 @@ void loopScreens()
         case RULES:
             break;
         case PLAY:
+            PauseMusicStream(getMenuMusic());
             runGame();
             break;
         case MENU:
@@ -78,6 +88,7 @@ void deinit()
 {
     deinitPrinter();
     deinitGame();
+    deinitAudio();
     CloseWindow();
 }
 }

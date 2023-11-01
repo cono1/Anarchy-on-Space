@@ -4,6 +4,8 @@
 
 #include <raylib.h>
 
+#include "Sound/sound.h"
+
 namespace game
 {
 const int maxMenuRects = 4;
@@ -41,19 +43,35 @@ void initMenu(const int screenWidth)
 void updateMenu(CurrentScreen& currentScreen)
 {
 	if (checkMenuInput(PLAY))
+	{
+		PauseMusicStream(getMenuMusic());
+		playButtonSound();
 		currentScreen = PLAY;
+	}
 
 	if (checkMenuInput(PAUSE))
+	{
+		playButtonSound();
 		currentScreen = PAUSE;
+	}
 
 	if (checkMenuInput(RULES))
+	{
+		playButtonSound();
 		currentScreen = RULES;
+	}
 
 	if (checkMenuInput(CREDITS))
+	{
+		playButtonSound();
 		currentScreen = CREDITS;
+	}
 
 	if (checkMenuInput(EXIT))
+	{
+		playButtonSound();
 		currentScreen = EXIT;
+	}
 }
 
 void updateMenu(CurrentScreen& currentScreen, bool& playAgain)
@@ -66,13 +84,14 @@ void updateMenu(CurrentScreen& currentScreen, bool& playAgain)
 
 	if (checkMenuInput(PAUSE))
 		currentScreen = PAUSE;
+	
 
 	if (checkMenuInput(RULES))
-		currentScreen = RULES;
+		currentScreen = RULES;	
 
 	if (checkMenuInput(CREDITS))
 		currentScreen = CREDITS;
-
+	
 	if (checkMenuInput(EXIT))
 		currentScreen = EXIT;
 }

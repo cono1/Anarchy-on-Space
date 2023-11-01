@@ -13,6 +13,7 @@
 #include "collisionManager.h"
 #include "printer.h"
 #include "menu.h"
+#include "Sound/sound.h"
 
 namespace game
 {
@@ -32,6 +33,7 @@ static Asteroid bigAsteroids[bigAsteroidsMax];
 static Asteroid medAsteroids[medAsteroidsMax];
 static Asteroid smallAsteroids[smallAsteroidsMax];
 static Player player;
+
 static Timer timer;
 
 static int waitTimeForNewAsteroid = 10000;
@@ -51,6 +53,7 @@ void updatePlayerStatus();
 void initGame()
 {
     SetRandomSeed(static_cast<unsigned int>(time(NULL)));
+
     startTimer(timer);
     initPlayer(player);
     initShip(ship);
@@ -80,13 +83,18 @@ void runGame()
 
 void updateGame()
 {
+    playGameMusic();
+    UpdateMusicStream(getGameMusic());
+
     bool playAgain = false;
 
     if (ship.isAlive && !player.won)
     {
         if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
         {
+            PauseMusicStream(getGameMusic());
             currentScreen = PAUSE;
+            playButtonSound();
         }
 
         updatePlayerStatus();
@@ -100,6 +108,7 @@ void updateGame()
             {
                 if (!bullet[i].active)
                 {
+                    playShootSound();
                     activateBullet(bullet[i], ship.pos, ship.texture.width, ship.texture.height);
                     break;
                 }
@@ -184,6 +193,7 @@ void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& 
 
         if (checkShipToAsteroidCollision(ship, baseAsteroids[i]))
         {
+            playLooseHpSound();
             removeShipLives(ship, 1);
             std::cout << ship.lives << ": hp";
             restartShip(ship);
@@ -196,6 +206,7 @@ void updateAsteroidsStatus(Asteroid baseAsteroids[], int baseAsteroidsMax, int& 
         {
             if (checkBulletToAsteroidCollision(bullet[j], baseAsteroids[i]))
             {
+                playAsteroidsSeparateSound();
                 deActivateBullet(bullet[j]);
                 baseAsteroidsActive--;
 
@@ -248,7 +259,10 @@ void updatePlayerStatus()
         player.won = true;
 
     if (ship.lives <= 0)
+    {
+        playDeathSound();
         player.won = false;
+    }
 }
 
 void drawGame()
@@ -295,7 +309,6 @@ void deinitGame()
 {
     for (int i = 0; i < bigAsteroidsMax; i++)
         deInitAsteroid(bigAsteroids[i]);
-
     deInitShip(ship);
     deInitShip(enemyShip);
 }

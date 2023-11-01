@@ -29,6 +29,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Player\player.cpp" />
     <ClCompile Include="src\Ship\ship.cpp" />
+    <ClCompile Include="src\Sound\sound.cpp" />
     <ClCompile Include="src\Utilities\utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
     <ClInclude Include="src\Game\printer.h" />
     <ClInclude Include="src\Player\player.h" />
     <ClInclude Include="src\Ship\ship.h" />
+    <ClInclude Include="src\Sound\sound.h" />
     <ClInclude Include="src\Utilities\utilities.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
