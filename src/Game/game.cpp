@@ -6,6 +6,7 @@
 
 #include "gameplay.h"
 #include "credits.h"
+#include "rules.h"
 #include "menu.h"
 #include "printer.h"
 #include "Sound/sound.h"
@@ -59,6 +60,7 @@ void loopScreens()
             printCredits();
             break;
         case RULES:
+            printHowToPlay();
             break;
         case PLAY:
             PauseMusicStream(getMenuMusic());

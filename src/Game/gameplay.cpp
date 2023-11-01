@@ -306,7 +306,7 @@ void updateEnemyStatus()
 
 void updatePlayerStatus()
 {
-    if (player.score >= player.maxScore)
+    if (player.score >= getMaxScore())
         player.won = true;
 
     if (ship.lives <= 0)

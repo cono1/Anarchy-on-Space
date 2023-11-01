@@ -2,10 +2,12 @@
 
 namespace game
 {
+static int maxScore;
+
 void initPlayer(Player& player)
 {
 	player.score = 0;
-	player.maxScore = 10000;
+	maxScore = 10000;
 	player.won = false;
 }
 
@@ -23,5 +25,10 @@ void resetPlayer(Player& player)
 {
 	player.score = 0;
 	player.won = false;
+}
+
+int getMaxScore()
+{
+	return maxScore;
 }
 }

@@ -27,6 +27,7 @@
     <ClCompile Include="src\Game\gameplay.cpp" />
     <ClCompile Include="src\Game\menu.cpp" />
     <ClCompile Include="src\Game\printer.cpp" />
+    <ClCompile Include="src\Game\rules.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Player\player.cpp" />
     <ClCompile Include="src\Ship\ship.cpp" />
@@ -42,6 +43,7 @@
     <ClInclude Include="src\Game\gameplay.h" />
     <ClInclude Include="src\Game\menu.h" />
     <ClInclude Include="src\Game\printer.h" />
+    <ClInclude Include="src\Game\rules.h" />
     <ClInclude Include="src\Player\player.h" />
     <ClInclude Include="src\Ship\ship.h" />
     <ClInclude Include="src\Sound\sound.h" />
