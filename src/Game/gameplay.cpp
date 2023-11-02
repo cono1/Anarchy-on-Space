@@ -144,6 +144,7 @@ void updateGame()
         {
             enemyTimer = 0;
             enemyShip.lives = enemyShip.maxLives;
+            enemyShip.isAlive = false;
             shouldRunGame = true;           
             waitTimeForNewAsteroid = 9500;
             for (int i = 0; i < bigAsteroidsMax; i++)

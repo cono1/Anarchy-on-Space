@@ -70,7 +70,6 @@ void updateStatus()
 	if (isPausePressed() && IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
 	{
 		currentScreen = MENU;
-		currentScreen = PAUSE;
 		playButtonSound();
 	}
 }

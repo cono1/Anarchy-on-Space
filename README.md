@@ -51,3 +51,6 @@ If you want to see the full code:
 	- Ultimate 8BIT SFX Library Vol 3 by [mOsh](https://www.gamedevmarket.net/asset/ultimate-8bit-sfx-library-vol-3-35-retro-game-sounds)
 	- XYLOPHONE G4 by [Juan Camilo Orjuela](https://freesound.org/people/juancamiloorjuela/sounds/204648/)
 	- Free UI Click Sound Effects by [MadRooster](https://www.gamedevmarket.net/asset/free-ui-click-sound-effects-pack)
+
+- Fonts:
+	- Bebas Neue by [Ryoichi Tsunekawa](https://fonts.google.com/specimen/Bebas+Neue?preview.text=anarchy%20on%20space&query=Bebas+Neue)
